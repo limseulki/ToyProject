@@ -1,0 +1,69 @@
+<!-- 레시피 등록 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <title>우리들의 레시피</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+
+    </style>
+
+    <script>
+        function update_recipe() {
+            let url = $('#url').val()
+            let name = $('#name').val()
+            let recipe = $('#recipe').val()
+
+            let formData = new FormData();
+            formData.append("url_give", url);
+            formData.append("name_give", name);
+            formData.append("recipe_give", recipe);
+
+            fetch('/recipe/update', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
+                alert(data['msg'])
+            })
+            location.href='/recipe'
+            // 메인으로 돌아가는데 지금 등록한 요리가 자동으로 로드되지 않는다.
+        }
+
+    </script>
+</head>
+
+<body>
+    <div class="myupdate" id="update-box">
+        <div class="form-floating mb-3">
+            <input id="url" type="email" class="form-control" placeholder="name@example.com">
+            <label>음식사진URL</label>
+        </div>
+        <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="name"></textarea>
+            <label for="name">요리명을 입력해주세요</label>
+          </div>
+        <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="recipe" style="height: 100px"></textarea>
+            <label for="recipe">레시피를 입력해주세요</label>
+          </div>
+    </div>
+    <div class="mybtns">
+        <button class="btn btn-warning" onclick="location.href='/recipe'">목록으로</button>
+        <button class="btn btn-warning" onclick="update_recipe()">등록하기</button>
+    </div>
+</body>
+
+</html>
