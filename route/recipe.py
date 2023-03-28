@@ -56,3 +56,17 @@ def recipe_delete():
    name_receive = request.json['button_delete']
    db.recipes.delete_one({'name':name_receive})
    return jsonify({'msg':'삭제완료!'})
+
+#레시피 수정 put
+@blue_recipe.route('/put', methods=['PUT'])
+def recipe_put():
+   name_receive = request.json['button_modify']
+   image_receive = request.json['image_give']
+   recipe_receive = request.json['recipe_give']
+
+   print(name_receive, image_receive, recipe_receive)
+   # db.recipes.update_one({'name':name_receive},{'$set':{'name':name_receive}})
+   # db.recipes.update_one({'name':name_receive},{'$set':{'image':image_receive}})
+   # db.recipes.update_one({'name':name_receive},{'$set':{'recipe':recipe_receive}})
+   # print(name_receive, image_receive, recipe_receive)
+   return jsonify({'msg':'수정완료!'})

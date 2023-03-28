@@ -112,6 +112,23 @@
             })
         }
 
+        function modify_data(name, image, recipe) {
+            let modify_name = $('name').val()
+            let modify_image = $('image').val()
+            let modify_recipe = $('recipe').val()
+            console.log(modify_name,modify_image,modify_recipe)
+
+            fetch('/recipe/put', {
+                method: "PUT",
+                headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+                body: JSON.stringify({button_modify:name, 'name_give':modify_name, 'image_give':modify_image, 'recipe_give':modify_recipe}) })
+                .then((res) => res.json()).then((data) => {
+                alert(data['msg'])
+                window.location.reload()
+            })
+
+        }
+
     </script>
 </head>
 
