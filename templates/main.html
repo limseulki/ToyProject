@@ -1,0 +1,170 @@
+<!-- 레시피 전체 조회 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <title>우리들의 레시피</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+
+        .mytitle {
+            width: 100%;
+            height: 250px;
+
+            background-color: rgb(255, 255, 231);
+            color: rgb(60, 72, 48);
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            padding-left: 200px;
+        }
+
+        .d-grid {
+            margin-right: 100px;
+        }
+
+        .myupdaterecipe {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            margin-top: 20px;
+        }
+
+        .card {
+            object-fit: cover;
+        }
+
+        .mycards {
+            margin: 20px auto 50px auto;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            listing();
+        });
+
+        function listing() {
+            fetch('/recipe/list').then((res) => res.json()).then((data) => {
+                let rows = data['result']
+                $('#recipe-box').empty()
+
+                rows.forEach((a) => {
+                    let name = a['name']
+                    let image = a['image']
+
+                    let temp_html = `<div class="col">
+                                        <div class="card h-100">
+                                            <img src="${image}"
+                                                class="card-img-top" 
+                                                style="object-fit: cover">
+                                            <h5 class="card-name">${name}</h5>
+                                            <div class="d-grid gap-2 col-6 mx-auto">
+                                                <button class="btn btn-danger" onclick="delete_data('${name}')">삭제하기</button>
+                                                <button class="btn btn-outline-danger" onclick="modify_data('${name}')">수정하기</button>
+                                            </div>
+                                        </div>
+                                    </div>`
+                    $('#recipe-box').append(temp_html)
+                })
+            })
+        }
+
+        function signin() {
+            console.log("로그인코드 들어갑니다")
+        }
+
+        function signup() {
+            console.log("회원가입코드 들어갑니다")
+        }
+
+        function delete_data(name) {
+            fetch('/recipe/delete', { 
+                method: "DELETE", 
+                headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+                body: JSON.stringify({button_delete:name}) })
+                .then((res) => res.json()).then((data) => {
+                alert(data['msg'])
+                window.location.reload()
+            })
+        }
+
+    </script>
+</head>
+
+<body>
+    <div class="mytitle">
+        <h1>우리들의 레시피</h1>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-outline-warning" type="button" onclick="signin()">로그인</button>
+            <button class="btn btn-outline-warning" type="button" onclick="signup()">회원가입</button>
+        </div>
+    </div>
+
+    <div class="myupdaterecipe">
+        <button class="btn btn-warning" onclick="location.href = '/recipe/update'">레시피 등록하기</button>
+    </div>
+    <div class="mycards">
+        <div class="row row-cols-1 row-cols-md-3 g-3" id="recipe-box">
+            <div class="col">
+                <div class="card h-100">
+                    <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                        class="card-img-top">
+                    <h5 class="card-name">음식명이 들어갑니다</h5>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-danger">삭제하기</button>
+                        <button class="btn btn-outline-danger">수정하기</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                        class="card-img-top">
+                    <h5 class="card-name">음식명이 들어갑니다</h5>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-danger">삭제하기</button>
+                        <button class="btn btn-outline-danger">수정하기</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                        class="card-img-top">
+                    <h5 class="card-name">음식명이 들어갑니다</h5>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-danger">삭제하기</button>
+                        <button class="btn btn-outline-danger">수정하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>
