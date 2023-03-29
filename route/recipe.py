@@ -1,10 +1,12 @@
 # 레시피 전체 조회, 등록, 삭제, 수정
-from flask import Blueprint, Flask, render_template, request, jsonify
+from flask import Blueprint, Flask, render_template, request, jsonify, redirect
 app = Flask(__name__)
+import requests, jwt
 from pymongo import MongoClient
 client = MongoClient('mongodb+srv://sparta:test@cluster0.er12y5s.mongodb.net/?retryWrites=true&w=majority')
 # client = MongoClient('mongodb+srv://sparta:test@cluster0.cirioky.mongodb.net/?retryWrites=true&w=majority')
 db = client.dbsparta
+SECRET_KEY = 'recipe'
 
 import requests
 from bs4 import BeautifulSoup
@@ -91,21 +93,41 @@ def recipe_put():
    # print(name_receive, image_receive, recipe_receive)
    return jsonify({'msg':'수정완료!'})
 
+#레시피 수정 get
+@blue_recipe.route('/put/<under_id>')
+def recipe_update(under_id):
+   print(under_id)
+   recipe = db.recipes.find_one({'_id':ObjectId(under_id)})
+   print(recipe)
+   return render_template('update.html', recipe=recipe)
 
-
-
-
-# @blue_recipe.route("/1")
-# def detail():
-#     id = db.movies.find_one({'_id':ObjectId('64228cd1651170aa61050baa')})
-#     reviews = list(db.review.find({'recipe_id':'1'}))
-#     print(reviews)
-#     return render_template('recipe.html', id=id, reviews=reviews)
 
 # 레시피 상세 페이지
 @blue_recipe.route("/<under_id>")
 def detail(under_id):
-    id = db.recipes.find_one({'_id':ObjectId(under_id)})
-    reviews = list(db.review.find({'recipe_id':under_id}))
-    print(reviews)
-    return render_template('recipe.html', id=id, reviews=reviews)
+
+   #  token_receive = request.cookies.get('mytoken')
+   #  print(token_receive)
+   #  if token_receive is not None:
+   #      payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+   #      print("------------------------"+payload)
+   
+   # token_receive = request.cookies.get('mytoken')
+   # print(token_receive)
+   # try:
+   #    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+   #    user_info = db.user.find_one({"id": payload['id']})
+   #    print("-----------------------"+user_info)
+   #    return render_template('recipe.html', id=id, reviews=reviews, recipes=recipes)
+   # except jwt.ExpiredSignatureError:
+   #    print("로그인 시간 만료")
+   #    return redirect("/user/signin")
+   # except jwt.exceptions.DecodeError:
+   #    print("로그인 정보 잘못됨")
+   #    return redirect("/user/signin")
+
+   id = db.recipes.find_one({'_id':ObjectId(under_id)})
+   reviews = list(db.review.find({'recipe_id':under_id}))
+   recipes = list(map(str, id['recipe'].split("\n")))
+       
+   return render_template('recipe.html', id=id, reviews=reviews, recipes=recipes)

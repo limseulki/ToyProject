@@ -21,6 +21,15 @@
             font-family: 'Gowun Dodum', sans-serif;
         }
 
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
+        textarea {
+            resize: none;
+        }
+
         .mytitle {
             width: 100%;
             height: 250px;
@@ -59,10 +68,16 @@
             max-width: 1200px;
         }
 
-        .image, .recipe {
+        .recipe-name, .image{
             display: flex;
             justify-content: center;
             margin-top: 50px;
+        }
+
+        .recipe {
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 10px;
         }
         
         .buttons {
@@ -74,12 +89,10 @@
             margin-top: 20px;
         }
 
-        .reviews {
-            margin-bottom: 20px;
-        }
-
         .review {
-            margin-bottom: 10px;
+            width: 500px;
+            margin: auto;
+            margin-bottom: 20px;
         }
 
         .review-area {
@@ -91,6 +104,29 @@
     </style>
 
     <script>
+        // $.ajax({
+        //         type: "POST",
+        //         url: "/user/signin",
+        //         data: {
+        //             id_give: $("#id").val(),
+        //             pw_give: $("#pw").val()
+        //         },
+        //         dataType: "JSON",
+        //         success: function (reponse) {
+        //             if (reponse['flag'] == 'true') {
+        //                 $.cookie('mytoken', reponse['mytoken']);
+        //                 alert(reponse['msg'])
+        //                 window.location.href = '/recipe'
+        //             }
+        //             else {
+        //                 alert(reponse['msg'])
+        //             }
+        //         },
+        //         error: function (api_login) {
+        //             alert("어디가 문제인가")
+        //         }
+        //     })
+
         function delete_recipe(id, under_id) {
             alert(id)
             let formData = new FormData();
@@ -124,7 +160,7 @@
             textarea.innerText = "test";
             document.querySelector(".reviews").innerHTML = `
                 <textarea class="form-control review-area" id="review">${review}</textarea>
-                <button class="btn btn-outline-warning" id="${under_id}" name="${id}" onclick="updating_review(this.id, this.name)" type="button">수정</button>
+                <button class="btn btn-outline-warning review-area" id="${under_id}" name="${id}" onclick="updating_review(this.id, this.name)" type="button">수정</button>
             `;
             // document.querySelector(".reviews").append(textarea);
         }
@@ -156,47 +192,66 @@
 </head>
 <body>
     <div class="mytitle">
-        <h1>우리들의 레시피</h1>
+        <a href="/recipe">
+            <h1>우리들의 레시피</h1>
+        </a>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button class="btn btn-outline-warning" type="button" onclick="signin()">로그인</button>
             <button class="btn btn-outline-warning" type="button" onclick="signup()">회원가입</button>
         </div>
     </div>
-
     <div class="main">
         <div class="recipe-space">
+            <div class="recipe-name">
+                <h1>{{id.name}}</h1>
+            </div>
             <div class="image">
                 <img src="{{id.image}}" style="width: 30em;">
             </div>
             <div class="recipe">
-                {{id.desc}}
+                {% for recipe in recipes %}
+                    <h3>
+                        {{recipe}}
+                    </h3>
+                    &nbsp;
+                {% endfor %}
             </div>
             <div class="buttons">
-                <button class="btn btn-outline-warning" id="{{id.id}}" value="{{id._id}}" onclick="delete_recipe(this.id, this.value)">삭제</button>
-    
                 <input class="btn btn-outline-warning" type="button" value="목록" onclick="location.href='/recipe'">
-    
-                <input class="btn btn-outline-warning" type="button" value="수정" onclick="location.href='/recipe'">
-    
+                <input class="btn btn-outline-warning" type="button" value="수정" onclick="location.href='/recipe/put/{{id._id}}'">
+                <button class="btn btn-outline-warning" id="{{id.id}}" value="{{id._id}}" onclick="delete_recipe(this.id, this.value)">삭제</button>  
                 <button class="btn btn-outline-warning" data-bs-toggle="collapse" data-bs-target="#demo">댓글</button>
                 <div id="demo" class="collapse">
                     <div class="reviews">
-                        {% for review in reviews %}
-                            <div class="review">
-                                {{review.id}}
-                                {{review.review}}
-                                <button class="btn btn-outline-warning" id="{{review._id}}" name="{{review.id}}" value="{{review.review}}" onclick="updating(this.id, this.name, this.value)">수정</button>
-                                <button class="btn btn-outline-warning" id="{{review._id}}" value="{{review.id}}" onclick="delete_review(this.id, this.value)">삭제</button>
-                            </div>
-                        {% endfor %}
+                        <table class="table table-striped review">
+                            <thead>
+                                <tr>
+                                    <th>작성자</th>
+                                    <th>내용</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody style="vertical-align: middle;">
+                            {% for review in reviews %}
+                                <tr>
+                                    <td>{{review.id}}</td>
+                                    <td>{{review.review}}</td>
+                                    <td>
+                                        <button class="btn btn-outline-warning" id="{{review._id}}" name="{{review.id}}" value="{{review.review}}" onclick="updating(this.id, this.name, this.value)">수정</button>
+                                        <button class="btn btn-outline-warning" id="{{review._id}}" value="{{review.id}}" onclick="delete_review(this.id, this.value)">삭제</button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                     <div>
                         <input type="hidden" id="recipe_id" value="{{id._id}}">
                         <div class=review-area>
                             <input class="form-control" type="text" id="id" value="testID" readonly>
-                            <textarea class="form-control" id="review" rows="5" placeholder="댓글"></textarea>
+                            <textarea class="form-control" id="review" rows="2" placeholder="댓글"></textarea>
                         </div>
-                        <button class="btn btn-outline-warning" onclick="posting()" type="button">등록</button>
+                        <button class="btn btn-outline-warning review-area" onclick="posting()" type="button">등록</button>
                     </div>
                     <!-- <form action="/review" method="post" id="review_add">
                         <input type="hidden" name="recipe_id" value="1">
