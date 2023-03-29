@@ -104,29 +104,6 @@
     </style>
 
     <script>
-        // $.ajax({
-        //         type: "POST",
-        //         url: "/user/signin",
-        //         data: {
-        //             id_give: $("#id").val(),
-        //             pw_give: $("#pw").val()
-        //         },
-        //         dataType: "JSON",
-        //         success: function (reponse) {
-        //             if (reponse['flag'] == 'true') {
-        //                 $.cookie('mytoken', reponse['mytoken']);
-        //                 alert(reponse['msg'])
-        //                 window.location.href = '/recipe'
-        //             }
-        //             else {
-        //                 alert(reponse['msg'])
-        //             }
-        //         },
-        //         error: function (api_login) {
-        //             alert("어디가 문제인가")
-        //         }
-        //     })
-
         function delete_recipe(id, under_id) {
             alert(id)
             let formData = new FormData();
@@ -135,7 +112,7 @@
 
             fetch('/recipe/delete', { method: "DELETE", body: formData }).then((res) => res.json()).then((data) => {
                 alert(data['msg'])
-                location.href = "/recipe"
+                window.location.href = "/recipe"
             })
         }
 
@@ -151,7 +128,11 @@
 
             fetch('/review', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
                 alert(data['msg'])
-                window.location.reload()
+                if (data['login'] == 'true'){
+                    window.location.reload()
+                } else{
+                    window.location.href = '/user/signin'
+                }
             })
         }
         function updating(under_id, id, review) {
@@ -173,7 +154,11 @@
 
             fetch('/review', { method: "PUT", body: formData }).then((res) => res.json()).then((data) => {
                 alert(data['msg'])
-                window.location.reload()
+                if (data['login'] == 'true'){
+                    window.location.reload()
+                } else{
+                    window.location.href = '/user/signin'
+                }
             })
         }
 
@@ -184,7 +169,11 @@
 
             fetch('/review', { method: "DELETE", body: formData }).then((res) => res.json()).then(data => {
                 alert(data['msg'])
-                window.location.reload()
+                if (data['login'] == 'true'){
+                    window.location.reload()
+                } else{
+                    window.location.href = '/user/signin'
+                }
             });
         }
     </script>
@@ -224,13 +213,17 @@
                 <div id="demo" class="collapse">
                     <div class="reviews">
                         <table class="table table-striped review">
-                            <thead>
-                                <tr>
-                                    <th>작성자</th>
-                                    <th>내용</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
+                            {% if reviews != [] %}
+                                <thead>
+                                    <tr>
+                                        <th>작성자</th>
+                                        <th>내용</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            {% else %}
+                                댓글이 없습니다
+                            {% endif %}
                             <tbody style="vertical-align: middle;">
                             {% for review in reviews %}
                                 <tr>
@@ -247,10 +240,17 @@
                     </div>
                     <div>
                         <input type="hidden" id="recipe_id" value="{{id._id}}">
-                        <div class=review-area>
-                            <input class="form-control" type="text" id="id" value="testID" readonly>
-                            <textarea class="form-control" id="review" rows="2" placeholder="댓글"></textarea>
-                        </div>
+                        {% if user_id != undefined %}
+                            <div class=review-area>
+                                <input class="form-control" type="text" id="id" value="{{user_id}}" readonly>
+                                <textarea class="form-control" id="review" rows="2" placeholder="댓글"></textarea>
+                            </div>
+                        {% else %}
+                            <div class=review-area>
+                                <input class="form-control" type="text" id="id" value="" readonly>
+                                <textarea class="form-control" id="review" rows="2" placeholder="댓글"></textarea>
+                            </div>
+                        {% endif %}
                         <button class="btn btn-outline-warning review-area" onclick="posting()" type="button">등록</button>
                     </div>
                     <!-- <form action="/review" method="post" id="review_add">

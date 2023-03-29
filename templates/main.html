@@ -68,29 +68,6 @@
     </style>
 
     <script>
-        // $.ajax({
-        //         type: "POST",
-        //         url: "/user/signin",
-        //         data: {
-        //             id_give: $("#id").val(),
-        //             pw_give: $("#pw").val()
-        //         },
-        //         dataType: "JSON",
-        //         success: function (reponse) {
-        //             if (reponse['flag'] == 'true') {
-        //                 $.cookie('mytoken', reponse['mytoken']);
-        //                 alert(reponse['msg'])
-        //                 window.location.href = '/recipe'
-        //             }
-        //             else {
-        //                 alert(reponse['msg'])
-        //             }
-        //         },
-        //         error: function (api_login) {
-        //             alert("어디가 문제인가")
-        //         }
-        //     })
-
         $(document).ready(function () {
             listing();
         });
