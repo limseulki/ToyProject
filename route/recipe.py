@@ -15,12 +15,23 @@ blue_recipe = Blueprint("recipe", __name__, url_prefix="/recipe")
 # 메인
 @blue_recipe.route('/')
 def home():
+   
+#    all_recipes = list(db.recipes.find({}))
+#    for i in all_recipes:
+#       print(i['_id'])
+
    return render_template('main.html')
 
 # 없어도 될 것 같아요
 @blue_recipe.route('/list', methods=['GET'])
 def test_get():
-   all_recipes = list(db.recipes.find({},{'_id':False}))
+   
+   all_recipes = []
+   recipes = list(db.recipes.find({}))
+   for recipe in recipes:
+      recipe['_id'] = str(recipe['_id'])
+      all_recipes.append(recipe)
+
    return jsonify({'result':all_recipes})
 
 # 레시피 등록 get
@@ -55,8 +66,15 @@ def recipe_post():
 # 레시피 삭제 delete
 @blue_recipe.route('/delete', methods=['DELETE'])
 def recipe_delete():
-   name_receive = request.json['button_delete']
-   db.recipes.delete_one({'name':name_receive})
+   
+   # name_receive = request.json['button_delete']
+   # db.recipes.delete_one({'name':name_receive})
+   id_receive = request.form['id']
+   under_id_receive = request.form['under_id']
+   print(id_receive)
+   print(under_id_receive)
+#    db.recipes.delete_one({'_id':ObjectId(under_id_receive)})
+
    return jsonify({'msg':'삭제완료!'})
 
 #레시피 수정 put
@@ -77,28 +95,17 @@ def recipe_put():
 
 
 
-# blue_recipe = Blueprint("main", __name__, url_prefix="/")
-
-# @blue_recipe.route("/")
-# def home():
-#     all_recipes = []
-#     recipes = list(db.bucket.find({}))
-#     for recipe in recipes:
-#         recipe['_id'] = str(recipe['_id'])
-#         all_recipes.append(recipe)
-#     return render_template('main.html', all_recipes=all_recipes)
-
-
-# @blue_recipe.route("/")
-# def recipe():
-#     all_recipes = list(db.bucket.find({}))
-#     print(all_recipes)
-#     num = 1
-#     return render_template('recipe.html', num=num)
-
-# @blue_recipe.route("/recipe/1")
+# @blue_recipe.route("/1")
 # def detail():
 #     id = db.movies.find_one({'_id':ObjectId('64228cd1651170aa61050baa')})
 #     reviews = list(db.review.find({'recipe_id':'1'}))
 #     print(reviews)
 #     return render_template('recipe.html', id=id, reviews=reviews)
+
+# 레시피 상세 페이지
+@blue_recipe.route("/<under_id>")
+def detail(under_id):
+    id = db.recipes.find_one({'_id':ObjectId(under_id)})
+    reviews = list(db.review.find({'recipe_id':under_id}))
+    print(reviews)
+    return render_template('recipe.html', id=id, reviews=reviews)

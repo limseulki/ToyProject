@@ -4,8 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-client = MongoClient('mongodb+srv://sparta:test@cluster0.cirioky.mongodb.net/?retryWrites=true&w=majority')
-# client = MongoClient('mongodb+srv://sparta:test@cluster0.er12y5s.mongodb.net/?retryWrites=true&w=majority')
+# client = MongoClient('mongodb+srv://sparta:test@cluster0.cirioky.mongodb.net/?retryWrites=true&w=majority')
+client = MongoClient('mongodb+srv://sparta:test@cluster0.er12y5s.mongodb.net/?retryWrites=true&w=majority')
 db = client.dbsparta
 
 blue_review = Blueprint("review", __name__, url_prefix="/review")
@@ -14,6 +14,7 @@ blue_review = Blueprint("review", __name__, url_prefix="/review")
 def home():
     return render_template('review.html')
 
+# 리뷰 등록
 @blue_review.route("/", methods=["POST"])
 def add():
     recipe_id_receive = request.form['recipe_id']
@@ -29,13 +30,14 @@ def add():
     
     return jsonify({'msg':'저장완료!'})
 
+# 리뷰 수정
 @blue_review.route("/", methods=["PUT"])
 def update():
     # recipe_id_receive = request.form['recipe_id']
-    id_receive = request.form['id']
     under_id_receive = request.form['under_id']
+    id_receive = request.form['id']
     review_receive = request.form['review']
-    
+
     doc = {
         'review':review_receive
         }
@@ -43,6 +45,7 @@ def update():
     
     return jsonify({'msg':'수정완료!'})
 
+# 리뷰 삭제
 @blue_review.route("/", methods=["DELETE"])
 def review_delete():
     id_receive = request.form['id_give'] ## 댓글의 id

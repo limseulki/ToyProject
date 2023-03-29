@@ -73,15 +73,18 @@
                 $('#recipe-box').empty()
 
                 rows.forEach((a) => {
+                    let under_id = a['_id']
                     let name = a['name']
                     let image = a['image']
 
                     let temp_html = `<div class="col">
                                         <div class="card h-100">
-                                            <img src="${image}"
-                                                class="card-img-top" 
-                                                style="object-fit: cover">
-                                            <h5 class="card-name">${name}</h5>
+                                            <a href="/recipe/${under_id}">
+                                                <img src="${image}"
+                                                    class="card-img-top" 
+                                                    style="object-fit: cover">
+                                                <h5 class="card-name">${name}</h5>
+                                            </a>
                                             <div class="d-grid gap-2 col-6 mx-auto">
                                                 <button class="btn btn-danger" onclick="delete_data('${name}')">삭제하기</button>
                                                 <button class="btn btn-outline-danger" onclick="modify_data('${name}')">수정하기</button>
