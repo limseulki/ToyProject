@@ -10,7 +10,6 @@ client = MongoClient('mongodb+srv://sparta:test@cluster0.er12y5s.mongodb.net/?re
 db = client.dbsparta
 SECRET_KEY = 'recipe'
 
-import requests
 from bs4 import BeautifulSoup
 from bson.objectid import ObjectId
 
@@ -69,36 +68,29 @@ def recipe_post():
 # 레시피 삭제 delete
 @blue_recipe.route('/delete', methods=['DELETE'])
 def recipe_delete():   
-   # name_receive = request.json['button_delete']
-   # db.recipes.delete_one({'name':name_receive})
-   id_receive = request.form['id']
-   under_id_receive = request.form['under_id']
-   print(id_receive)
-   print(under_id_receive)
+   name_receive = request.json['button_delete']
+   db.recipes.delete_one({'name':name_receive})
+   # id_receive = request.form['id']
+   # under_id_receive = request.form['under_id']
+   # print(id_receive)
+   # print(under_id_receive)
 #    db.recipes.delete_one({'_id':ObjectId(under_id_receive)})
 
    return jsonify({'msg':'삭제완료!'})
 
-# 레시피 수정 get
-@blue_recipe.route('/put/<under_id>')
-def get_modify(under_id):
-   print(under_id)
-   recipe = db.recipes.find_one({'_id':ObjectId(under_id)})
-   print(recipe)
-   return render_template('update.html', recipe=recipe)
+# 레시피 수정 put
+@blue_recipe.route('/put', methods=['PUT'])
+def recipe_put():
+   name_receive = request.json['name_give']
+   image_receive = request.json['image_give']
+   recipe_receive = request.json['recipe_give']
 
-#레시피 수정 put
-# @blue_recipe.route('/put', methods=['PUT'])
-# def recipe_put():
-#    name_receive = request.json['name_give']
-#    image_receive = request.json['image_give']
-#    recipe_receive = request.json['recipe_give']
-
-#    print(name_receive, image_receive, recipe_receive)
+   print(name_receive, image_receive, recipe_receive)
+   return jsonify({'msg':'수정완료!'})
 
 #레시피 수정 get
 @blue_recipe.route('/put/<under_id>')
-def recipe_update(under_id):
+def recipe_modify(under_id):
    print(under_id)
    recipe = db.recipes.find_one({'_id':ObjectId(under_id)})
    print(recipe)
