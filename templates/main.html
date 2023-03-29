@@ -22,6 +22,11 @@
             font-family: 'Gowun Dodum', sans-serif;
         }
 
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
         .mytitle {
             width: 100%;
             height: 250px;
@@ -73,15 +78,18 @@
                 $('#recipe-box').empty()
 
                 rows.forEach((a) => {
+                    let under_id = a['_id']
                     let name = a['name']
                     let image = a['image']
 
                     let temp_html = `<div class="col">
                                         <div class="card h-100">
-                                            <img src="${image}"
-                                                class="card-img-top" 
-                                                style="object-fit: cover">
-                                            <h5 class="card-name">${name}</h5>
+                                            <a href="/recipe/${under_id}">
+                                                <img src="${image}"
+                                                    class="card-img-top" 
+                                                    style="object-fit: cover">
+                                                <h5 class="card-name">${name}</h5>
+                                            </a>
                                             <div class="d-grid gap-2 col-6 mx-auto">
                                                 <button class="btn btn-danger" onclick="delete_data('${name}')">삭제하기</button>
                                                 <button class="btn btn-outline-danger" onclick="modify_data('${name}')">수정하기</button>
@@ -95,10 +103,12 @@
 
         function signin() {
             console.log("로그인코드 들어갑니다")
+            location.href = "/users/signin"
         }
 
         function signup() {
             console.log("회원가입코드 들어갑니다")
+            location.href = "/users/signup"
         }
 
         function delete_data(name) {
@@ -111,6 +121,15 @@
                 window.location.reload()
             })
         }
+
+        // function modify_data(name) {
+        //     fetch('/recipe/put', { 
+        //         method: "POST", 
+        //         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        //         body: JSON.stringify({button_modify:name}) })
+        //         .then((res) => res.json())
+        //         location.href='/recipe/put'
+        // }
 
         function modify_data(name, image, recipe) {
             let modify_name = $('name').val()
@@ -128,7 +147,6 @@
             })
 
         }
-
     </script>
 </head>
 

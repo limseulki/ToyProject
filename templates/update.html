@@ -1,4 +1,4 @@
-<!-- 레시피 등록 -->
+<!-- 레시피 등록, 수정 -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,14 +38,34 @@
             fetch('/recipe/update', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
                 alert(data['msg'])
             })
+            window.location.reload()
             location.href='/recipe'
-            // 메인으로 돌아가는데 지금 등록한 요리가 자동으로 로드되지 않는다.
         }
 
     </script>
 </head>
 
 <body>
+    {% if recipe != undefined %}
+    <div class="myupdate" id="update-box">
+        <div class="form-floating mb-3">
+            <input id="url" type="email" class="form-control" placeholder="name@example.com">
+            <label>{{recipe.image}}</label>
+        </div>
+        <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="name"></textarea>
+            <label for="name">{{recipe.name}}</label>
+          </div>
+        <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="recipe" style="height: 100px"></textarea>
+            <label for="recipe">{{recipe.recipe}}</label>
+          </div>
+    </div>
+    <div class="mybtns">
+        <button class="btn btn-warning" onclick="location.href='/recipe'">목록으로</button>
+        <button class="btn btn-warning" onclick="">수정하기</button>
+    </div>
+    {% else %}
     <div class="myupdate" id="update-box">
         <div class="form-floating mb-3">
             <input id="url" type="email" class="form-control" placeholder="name@example.com">
@@ -64,6 +84,8 @@
         <button class="btn btn-warning" onclick="location.href='/recipe'">목록으로</button>
         <button class="btn btn-warning" onclick="update_recipe()">등록하기</button>
     </div>
+    {% endif %}
+    
 </body>
 
 </html>
