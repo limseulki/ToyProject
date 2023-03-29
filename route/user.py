@@ -8,8 +8,9 @@ import certifi
 from flask import Flask, render_template, request, jsonify, redirect, Blueprint, url_for
 # app = Flask(__name__)
 
-client = MongoClient(
-    'mongodb+srv://sparta:test@cluster0.bka3lk3.mongodb.net/?retryWrites=true&w=majority', tlsCAFile=certifi.where())
+# client = MongoClient(
+#     'mongodb+srv://sparta:test@cluster0.bka3lk3.mongodb.net/?retryWrites=true&w=majority', tlsCAFile=certifi.where())
+client = MongoClient('mongodb+srv://sparta:test@cluster0.cirioky.mongodb.net/?retryWrites=true&w=majority')
 db = client.dbsparta
 
 # ca = certifi.where()
