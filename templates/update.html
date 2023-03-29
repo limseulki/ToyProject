@@ -1,4 +1,4 @@
-<!-- 레시피 등록 -->
+<!-- 레시피 등록, 수정 -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,8 +38,8 @@
             fetch('/recipe/update', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
                 alert(data['msg'])
             })
+            window.location.reload()
             location.href='/recipe'
-            // 메인으로 돌아가는데 지금 등록한 요리가 자동으로 로드되지 않는다.
         }
         
 

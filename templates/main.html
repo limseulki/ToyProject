@@ -126,10 +126,12 @@
 
         function signin() {
             console.log("로그인코드 들어갑니다")
+            location.href = "/users/signin"
         }
 
         function signup() {
             console.log("회원가입코드 들어갑니다")
+            location.href = "/users/signup"
         }
 
         function delete_data(name) {
@@ -142,6 +144,15 @@
                 window.location.reload()
             })
         }
+
+        // function modify_data(name) {
+        //     fetch('/recipe/put', { 
+        //         method: "POST", 
+        //         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        //         body: JSON.stringify({button_modify:name}) })
+        //         .then((res) => res.json())
+        //         location.href='/recipe/put'
+        // }
 
         function modify_data(name, image, recipe) {
             let modify_name = $('name').val()
@@ -159,7 +170,6 @@
             })
 
         }
-
     </script>
 </head>
 
