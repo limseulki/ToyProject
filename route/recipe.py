@@ -2,11 +2,11 @@
 from flask import Blueprint, Flask, render_template, request, jsonify, redirect
 app = Flask(__name__)
 
-import requests, jwt
+import requests, jwt#, django.http
+# from django.http import JsonResponse
 
 from pymongo import MongoClient
 client = MongoClient('mongodb+srv://sparta:test@cluster0.er12y5s.mongodb.net/?retryWrites=true&w=majority')
-# client = MongoClient('mongodb+srv://sparta:test@cluster0.cirioky.mongodb.net/?retryWrites=true&w=majority')
 db = client.dbsparta
 SECRET_KEY = 'recipe'
 
@@ -81,11 +81,11 @@ def recipe_delete():
 # 레시피 수정 put
 @blue_recipe.route('/put', methods=['PUT'])
 def recipe_put():
-   name_receive = request.json['name_give']
-   image_receive = request.json['image_give']
-   recipe_receive = request.json['recipe_give']
+   name_receive = request.form['name_give']
+   url_receive = request.form['url_give']
+   recipe_receive = request.form['recipe_give']
 
-   print(name_receive, image_receive, recipe_receive)
+   print(name_receive, url_receive, recipe_receive)
    return jsonify({'msg':'수정완료!'})
 
 #레시피 수정 get
@@ -110,13 +110,6 @@ def recipe_modify(under_id):
 @blue_recipe.route("/<under_id>")
 def detail(under_id):
 
-
-   #  token_receive = request.cookies.get('mytoken')
-   #  print(token_receive)
-   #  if token_receive is not None:
-   #      payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-   #      print("------------------------"+payload)
-   
    # token_receive = request.cookies.get('mytoken')
    # print(token_receive)
    # try:
@@ -134,5 +127,17 @@ def detail(under_id):
    id = db.recipes.find_one({'_id':ObjectId(under_id)})
    reviews = list(db.review.find({'recipe_id':under_id}))
    recipes = list(map(str, id['recipe'].split("\n")))
-       
-   return render_template('recipe.html', id=id, reviews=reviews, recipes=recipes)
+
+   token_receive = request.cookies.get('mytoken')
+   try:
+      if token_receive is not None: # token 값이 있다면 (로그인 상태라면)
+         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+         user_id = payload['id']
+         return render_template('recipe.html', id=id, reviews=reviews, recipes=recipes, user_id=user_id)
+      else: # token 값이 없다면 (로그아웃 상태라면)
+         return render_template('recipe.html', id=id, reviews=reviews, recipes=recipes)
+   except jwt.ExpiredSignatureError:
+      return redirect("/user/expired")
+      # return JsonResponse({"message": "EXPIRED_TOKEN"}, status = 400)
+   except jwt.exceptions.DecodeError:
+      return redirect("/user/expired")
