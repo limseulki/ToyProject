@@ -100,10 +100,10 @@
                 dataType: "JSON",
                 success: function (reponse) {
                     if (reponse['flag'] == 'true') {
-                        $.cookie('mytoken', response['mytoken'], {path: '/recipe/'});
+                        $.cookie('mytoken', reponse['mytoken'], {path: '/'});
                         alert(reponse['msg'])
                         // window.location.href = '/recipe'
-                        window.location.replace('/recipe/update')
+                        window.location.replace('/recipe')
                     }
                     else {
                         alert(reponse['msg'])

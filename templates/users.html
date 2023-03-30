@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <!-- Webpage Title -->
+    <title>우리들의레시피회원가입로그인</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta property="og:title" content="우리들의 레시피"/>
+    <meta property="og:description" content="항해99 27조 토이프로젝트"/>
+
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- {#공통된 스타일 시트 적용#} -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <!-- {#폰트 가져오기#} -->
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <style>
+        .top-recipe {
+            width: 100%;
+            height: 350px;
+
+
+            background-color: gold;
+            background-position: center 30%;
+            background-position-y: 20%;
+            background-size: cover;
+
+            color: black;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .top-recipe > h1 {
+            text-align: center;
+            padding: 100px 0;
+            font-size: 5.6875em;
+            font: bold;
+            -webkit-text-stroke: 3px white;
+            font-family: 'Jua', sans-serif;
+        }
+
+        body {
+            background-color: white;
+            min-height: 100vh;
+        }
+
+        .section {
+            padding: 1rem 1.5rem;
+            max-width: 750px;
+            margin: auto;
+        }
+
+        .title {
+            font-weight: 800;
+            font-size: 5rem;
+        }
+
+        .subtitle {
+            font-size: 2rem;
+        }
+
+        .is-sparta {
+            color: gold !important;
+        }
+
+        .button.is-sparta {
+            background-color: gold;
+            border-color: transparent;
+            color: #fff !important;
+            font-family: 'Jua', sans-serif;
+        }
+
+        .button.is-sparta.is-outlined {
+            background-color: transparent;
+            border-color: gold;
+            color: gold !important;
+        }
+
+        .help {
+            color: gray;
+        }
+
+        .is-hidden {
+            display: none !important;
+        }
+    </style>
+    <script>
+        // {% if msg %}
+            //     alert("{{ msg }}")
+            // {% endif %}
+        function sign_in() {
+            let id = $("#input-id").val()
+            let pw = $("#input-pw").val()
+
+            if (id == "") {
+                $("#help-id-login").text("아이디를 입력해주세요.")
+                $("#input-id").focus()
+                return;
+            } else {
+                $("#help-id-login").text("")
+            }
+
+            if (pw == "") {
+                $("#help-pw-login").text("비밀번호를 입력해주세요.")
+                $("#input-pw").focus()
+                return;
+            } else {
+                $("#help-pw-login").text("")
+            }
+            $.ajax({
+                type: "POST",
+                url: "/user/signin",
+                data: {
+                    id_give: id,
+                    pw_give: pw
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        $.cookie('mytoken', response['token'], {path: '/'});
+                        window.location.replace("/recipe/")
+                        alert(response['msg'])
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            });
+        }
+
+        function sign_up() {
+            let id = $("#input-id").val()
+            let pw = $("#input-pw").val()
+            let pw2 = $("#input-pw2").val()
+            let name = $("#input-name").val()
+            // console.log(username, password, password2)
+
+
+            if ($("#help-id").hasClass("is-danger")) {
+                alert("아이디를 다시 확인해주세요.")
+                return;
+            } else if (!$("#help-id").hasClass("is-success")) {
+                alert("아이디 중복확인을 해주세요.")
+                return;
+            }
+
+            if ($("#help-name").hasClass("is-danger")) {
+                alert("닉네임을 다시 확인해주세요.")
+                return;
+            } else if (!$("#help-name").hasClass("is-success")) {
+                alert("닉네임 중복확인을 해주세요.")
+                return;
+            }
+
+            if (pw == "") {
+                $("#help-pw").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-pw").focus()
+                return;
+            } else if (!is_pw(pw)) {
+                $("#help-pw").text("비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자").removeClass("is-safe").addClass("is-danger")
+                $("#input-pw").focus()
+                return
+            } else {
+                $("#help-pw").text("사용할 수 있는 비밀번호입니다.").removeClass("is-danger").addClass("is-success")
+            }
+            if (pw2 == "") {
+                $("#help-pw2").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-pw2").focus()
+                return;
+            } else if (pw2 != pw) {
+                $("#help-pw2").text("비밀번호가 일치하지 않습니다.").removeClass("is-safe").addClass("is-danger")
+                $("#input-pw2").focus()
+                return;
+            } else {
+                $("#help-pw2").text("비밀번호가 일치합니다.").removeClass("is-danger").addClass("is-success")
+            }
+            $.ajax({
+                type: "POST",
+                url: "/user/signup",
+                data: {
+                    id_give: id,
+                    pw_give: pw,
+                    name_give: name
+                },
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.replace("/user/users")
+                }
+            });
+
+        }
+
+        function toggle_sign_up() {
+            $("#sign-up-box").toggleClass("is-hidden")
+            $("#div-sign-in-or-up").toggleClass("is-hidden")
+            $("#btn-id_check").toggleClass("is-hidden")
+            $("#btn-name_check").toggleClass("is-hidden")
+            $("#help-id").toggleClass("is-hidden")
+            $("#help-name").toggleClass("is-hidden")
+            $("#help-pw").toggleClass("is-hidden")
+            $("#help-pw2").toggleClass("is-hidden")
+        }
+
+        function is_id(asValue) {
+            var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
+            // {# ()는 필수포함[]는 입력에 포함되는 범위 {}는 입력의 최소 최대글자수 #}
+            return regExp.test(asValue);
+        }
+
+        function is_pw(asValue) {
+            var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+            // {#\d는 숫자를 표현함#}
+            return regExp.test(asValue);
+        }
+
+        function id_check() {
+            let id = $("#input-id").val()
+            console.log(id)
+            if (id == "") {
+                $("#help-id").text("아이디를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-id").focus()
+                return;
+            }
+            if (!is_id(id)) {
+                $("#help-id").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이").removeClass("is-safe").addClass("is-danger")
+                $("#input-id").focus()
+                return;
+            }
+            $("#help-id").addClass("is-loading")
+            $.ajax({
+                type: "POST",
+                url: "/user/signup/checkup",
+                data: {
+                    id_give: id
+                },
+                success: function (response) {
+
+                    if (response["exists"]) {
+                        $("#help-id").text("이미 존재하는 아이디입니다.").removeClass("is-safe").addClass("is-danger")
+                        $("#input-id").focus()
+                    } else {
+                        $("#help-id").text("사용할 수 있는 아이디입니다.").removeClass("is-danger").addClass("is-success")
+                    }
+                    $("#help-id").removeClass("is-loading")
+
+                }
+            });
+        }
+
+        function name_check() {
+            let name = $("#input-name").val()
+            console.log(name)
+            if (name == "") {
+                $("#help-name").text("닉네임을 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-name").focus()
+                return;
+            }
+            $("#help-name").addClass("is-loading")
+            $.ajax({
+                type: "POST",
+                url: "/user/signup/checkup2",
+                data: {
+                    name_give: name
+                },
+                success: function (response) {
+
+                    if (response["exists"]) {
+                        $("#help-name").text("이미 존재하는 닉네임입니다.").removeClass("is-safe").addClass("is-danger")
+                        $("#input-name").focus()
+                    } else {
+                        $("#help-name").text("사용할 수 있는 닉네임입니다.").removeClass("is-danger").addClass("is-success")
+                    }
+                    $("#help-name").removeClass("is-loading")
+
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+<div class="top-recipe">
+    <h1>우리들의 레시피🥘</h1>
+</div>
+<section class="section">
+    <div class="container">
+        <div class="box" style="max-width: 480px;margin:auto">
+            <article class="media">
+                <div class="media-content">
+                    <div class="content">
+                        <div class="field has-addons">
+                            <div class="control has-icons-left" style="width:100%">
+                                <input id="input-id" class="input" type="text" placeholder="아이디">
+                                <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                            </div>
+                            <div id="btn-id_check" class="control is-hidden">
+                                <button class="button is-sparta" onclick="id_check()">중복확인</button>
+                            </div>
+
+                        </div>
+                        <p id="help-id" class="help is-hidden">아이디는 2-10자의 영문과 숫자와 일부 특수문자(._-)만 입력 가능합니다.</p>
+                        <p id="help-id-login" class="help is-danger"></p>
+
+                        <div class="field">
+                            <div class="control has-icons-left">
+                                <input id="input-pw" class="input" type="password" placeholder="비밀번호">
+                                <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                            </div>
+                            <p id="help-pw" class="help is-hidden">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도
+                                사용
+                                가능합니다.</p>
+                        </div>
+
+
+                    </div>
+                    <div id="div-sign-in-or-up" class="has-text-centered">
+                        <nav class="level is-mobile">
+                            <button class="level-item button is-sparta" onclick="sign_in()">
+                                로그인
+                            </button>
+
+                        </nav>
+                        <hr>
+                        <nav class="level is-mobile">
+                            <button class="level-item button is-sparta is-outlined"
+                                    onclick="toggle_sign_up()">
+                                회원가입하기
+                            </button>
+                        </nav>
+                    </div>
+
+                    <div id="sign-up-box" class="is-hidden">
+                        <div class="mb-5">
+                            <div class="field">
+                                <div class="control has-icons-left" style="width:100%">
+                                    <input id="input-pw2" class="input" type="password"
+                                           placeholder="비밀번호 재입력">
+                                    <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                                </div>
+                                <p id="help-pw2" class="help is-hidden">비밀번호를 다시 한 번 입력해주세요.</p>
+
+                            </div>
+
+                            <div class="field has-addons">
+                                <div class="control has-icons-left" style="width:100%">
+                                    <input id="input-name" class="input" type="text" placeholder="닉네임">
+                                    <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                                </div>
+                                <div id="btn-name_check" class="control is-hidden">
+                                    <button class="button is-sparta" onclick="name_check()">중복확인</button>
+                                </div>
+    
+                            </div>
+                            <p id="help-name" class="help is-hidden">우리들의 레시피 활동에 사용할 닉네임을 입력해주세요.</p>
+                            <p id="help-name" class="help is-danger"></p>
+
+                        </div>
+                        <nav class="level is-mobile">
+                            <button class="level-item button is-sparta" onclick="sign_up()">
+                                회원가입
+                            </button>
+                            <button class="level-item button is-sparta is-outlined" onclick="toggle_sign_up()">
+                                취소
+                            </button>
+                        </nav>
+                    </div>
+
+
+                </div>
+            </article>
+        </div>
+
+    </div>
+</section>
+</body>
+</html>
