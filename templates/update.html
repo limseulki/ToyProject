@@ -42,6 +42,21 @@
             location.href='/recipe'
         }
         
+        // function modifiy_recipe() {
+        //     let modify_url = $('#url').val()
+        //     let modify_name = $('#name').val()
+        //     let modify_recipe = $('#recipe').val()
+        //     console.log(modify_url, modify_name, modify_recipe)
+
+        //     let formData = new FormData();
+        //     formData.append("url_give", modify_url);
+        //     formData.append("name_give", modify_name);
+        //     formData.append("recipe_give", modify_recipe);
+
+        //     fetch('/recipe/put', { method: "PUT", body: formData }).then((res) => res.json()).then((data) => {
+        //         alert(data['msg'])
+        //     })
+        // }
 
     </script>
 </head>
@@ -50,21 +65,21 @@
     {% if recipe != undefined %}
         <div class="myupdate" id="update-box">
             <div class="form-floating mb-3">
-                <input id="url" type="email" class="form-control" placeholder="name@example.com">
-                <label>{{recipe.image}}</label>
+                <input id="url" type="email" class="form-control" placeholder="name@example.com" value="{{recipe.image}}">
+                <label>음식사진URL</label>
             </div>
             <div class="form-floating">
-                <textarea class="form-control" placeholder="Leave a comment here" id="name"></textarea>
-                <label for="name">{{recipe.name}}</label>
+                <textarea class="form-control" placeholder="Leave a comment here" id="name">{{recipe.name}}</textarea>
+                <label for="name">요리명을 입력해주세요</label>
             </div>
             <div class="form-floating">
-                <textarea class="form-control" placeholder="Leave a comment here" id="recipe" style="height: 100px"></textarea>
-                <label for="recipe">{{recipe.recipe}}</label>
+                <textarea class="form-control" placeholder="Leave a comment here" id="recipe" style="height: 100px">{{recipe.recipe}}</textarea>
+                <label for="recipe">레시피를 입력해주세요</label>
             </div>
         </div>
         <div class="mybtns">
             <button class="btn btn-warning" onclick="location.href='/recipe'">목록으로</button>
-            <button class="btn btn-warning" onclick="">수정하기</button>
+            <button class="btn btn-warning" onclick="modifiy_recipe()">수정하기</button>
         </div>
     {% else %}
         <div class="myupdate" id="update-box">

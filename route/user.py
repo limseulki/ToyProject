@@ -113,6 +113,10 @@ def signup_form():
 def signin_form():
     return render_template('signin.html')
 
+@blue_user.route("/expired", methods=["GET"])
+def token_exp():
+    return render_template('expired.html')
+
 
 # if __name__ == '__main__':
 #     app.run('0.0.0.0', port=5000, debug=True)
