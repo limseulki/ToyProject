@@ -27,6 +27,10 @@
             text-decoration: none;
         }
         
+        .d-grid {
+            margin-right: 100px;
+        }
+        
         .mytitle {
             width: 100%;
             height: 250px;
@@ -91,6 +95,19 @@
                 location.href = "/recipe"
             })
         }
+
+        function signout() {
+            // $.removeCookie('mytoken', {path: '/'});
+            window.location.replace("/user/expired")
+            // $.ajax({
+            //     type: "get",
+            //     url: "/user/signout",
+                // data: {
+                //     id_give: id,
+                //     pw_give: pw
+                // },
+            // });
+        }
         
         // function modifiy_recipe() {
         //     let modify_url = $('#url').val()
@@ -118,8 +135,7 @@
             <h1>우리들의 레시피</h1>
         </a>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <button class="btn btn-outline-warning" type="button" onclick="signin()">로그인</button>
-            <button class="btn btn-outline-warning" type="button" onclick="signup()">회원가입</button>
+            <button class="btn btn-outline-warning" type="button" onclick="signout()">로그아웃</button>
         </div>
     </div>
     <div class="myupdate" id="update-box">
@@ -147,8 +163,7 @@
             <h1>우리들의 레시피</h1>
         </a>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <button class="btn btn-outline-warning" type="button" onclick="signin()">로그인</button>
-            <button class="btn btn-outline-warning" type="button" onclick="signup()">회원가입</button>
+            <button class="btn btn-outline-warning" type="button" onclick="signout()">로그아웃</button>
         </div>
     </div>
     <div class="myupdate" id="update-box">
