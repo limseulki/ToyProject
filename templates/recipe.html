@@ -104,14 +104,27 @@
     </style>
 
     <script>
-        function signin() {
-            console.log("로그인코드 들어갑니다")
-            location.href = "/user/signin"
-        }
+        // function signin() {
+        //     console.log("로그인코드 들어갑니다")
+        //     location.href = "/user/users"
+        // }
 
-        function signup() {
-            console.log("회원가입코드 들어갑니다")
-            location.href = "/user/signup"
+        // function signup() {
+        //     console.log("회원가입코드 들어갑니다")
+        //     location.href = "/user/signup"
+        // }
+
+        function signout() {
+            // $.removeCookie('mytoken', {path: '/'});
+            window.location.replace("/user/expired")
+            // $.ajax({
+            //     type: "get",
+            //     url: "/user/signout",
+                // data: {
+                //     id_give: id,
+                //     pw_give: pw
+                // },
+            // });
         }
 
         function delete_recipe(id, under_id) {
@@ -141,7 +154,7 @@
                 if (data['login'] == 'true'){
                     window.location.reload()
                 } else{
-                    window.location.href = '/user/signin'
+                    window.location.href = '/user/users'
                 }
             })
         }
@@ -167,7 +180,7 @@
                 if (data['login'] == 'true'){
                     window.location.reload()
                 } else{
-                    window.location.href = '/user/signin'
+                    window.location.href = '/user/users'
                 }
             })
         }
@@ -182,7 +195,7 @@
                 if (data['login'] == 'true'){
                     window.location.reload()
                 } else{
-                    window.location.href = '/user/signin'
+                    window.location.href = '/user/users'
                 }
             });
         }
@@ -195,8 +208,7 @@
             <h1>우리들의 레시피</h1>
         </a>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <button class="btn btn-outline-warning" type="button" onclick="signin()">로그인</button>
-            <button class="btn btn-outline-warning" type="button" onclick="signup()">회원가입</button>
+            <button class="btn btn-outline-warning" type="button" onclick="signout()">로그아웃</button>
         </div>
     </div>
     <div class="main">

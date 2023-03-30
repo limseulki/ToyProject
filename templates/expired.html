@@ -3,9 +3,9 @@
 <script>
     function logout(){
         $.removeCookie('mytoken', {path: '/'});
-        window.location.href = '/user/signin'
+        window.location.href = '/user/users'
     };
 
-    alert("세션이 만료되었습니다")
+    alert("로그아웃 되었습니다")
     logout();
 </script>
