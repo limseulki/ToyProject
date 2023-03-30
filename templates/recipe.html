@@ -128,7 +128,6 @@
         //     })
 
         function delete_recipe(id, under_id) {
-            alert(id)
             let formData = new FormData();
             formData.append("id", id);
             formData.append("under_id", under_id);
@@ -154,6 +153,7 @@
                 window.location.reload()
             })
         }
+
         function updating(under_id, id, review) {
             let textarea = document.createElement("textarea");
             textarea.setAttribute("id", "review");
@@ -164,6 +164,7 @@
             `;
             // document.querySelector(".reviews").append(textarea);
         }
+        
         function updating_review(under_id, id) {
             let review = $('#review').val();
             let formData = new FormData();
