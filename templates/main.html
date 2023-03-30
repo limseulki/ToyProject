@@ -113,10 +113,6 @@
                                                     style="object-fit: cover">
                                                 <h5 class="card-name">${name}</h5>
                                             </a>
-                                            <div class="d-grid gap-2 col-6 mx-auto">
-                                                <button class="btn btn-danger" onclick="delete_data('${name}')">삭제하기</button>
-                                                <button class="btn btn-outline-danger" onclick="modify_data('${name}')">수정하기</button>
-                                            </div>
                                         </div>
                                     </div>`
                     $('#recipe-box').append(temp_html)
@@ -133,49 +129,14 @@
             console.log("회원가입코드 들어갑니다")
             location.href = "/user/signup"
         }
-
-        function delete_data(name) {
-            fetch('/recipe/delete', { 
-                method: "DELETE", 
-                headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-                body: JSON.stringify({button_delete:name}) })
-                .then((res) => res.json()).then((data) => {
-                alert(data['msg'])
-                window.location.reload()
-            })
-        }
-
-        // function modify_data(name) {
-        //     fetch('/recipe/put', { 
-        //         method: "POST", 
-        //         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-        //         body: JSON.stringify({button_modify:name}) })
-        //         .then((res) => res.json())
-        //         location.href='/recipe/put'
-        // }
-
-        function modify_data(name, image, recipe) {
-            let modify_name = $('name').val()
-            let modify_image = $('image').val()
-            let modify_recipe = $('recipe').val()
-            console.log(modify_name,modify_image,modify_recipe)
-
-            fetch('/recipe/put', {
-                method: "PUT",
-                headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-                body: JSON.stringify({button_modify:name, 'name_give':modify_name, 'image_give':modify_image, 'recipe_give':modify_recipe}) })
-                .then((res) => res.json()).then((data) => {
-                alert(data['msg'])
-                window.location.reload()
-            })
-
-        }
     </script>
 </head>
 
 <body>
     <div class="mytitle">
-        <h1>우리들의 레시피</h1>
+        <a href="/recipe">
+            <h1>우리들의 레시피</h1>
+        </a>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button class="btn btn-outline-warning" type="button" onclick="signin()">로그인</button>
             <button class="btn btn-outline-warning" type="button" onclick="signup()">회원가입</button>
@@ -193,8 +154,6 @@
                         class="card-img-top">
                     <h5 class="card-name">음식명이 들어갑니다</h5>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button class="btn btn-danger">삭제하기</button>
-                        <button class="btn btn-outline-danger">수정하기</button>
                     </div>
                 </div>
             </div>
@@ -204,8 +163,6 @@
                         class="card-img-top">
                     <h5 class="card-name">음식명이 들어갑니다</h5>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button class="btn btn-danger">삭제하기</button>
-                        <button class="btn btn-outline-danger">수정하기</button>
                     </div>
                 </div>
             </div>
@@ -215,8 +172,6 @@
                         class="card-img-top">
                     <h5 class="card-name">음식명이 들어갑니다</h5>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button class="btn btn-danger">삭제하기</button>
-                        <button class="btn btn-outline-danger">수정하기</button>
                     </div>
                 </div>
             </div>
