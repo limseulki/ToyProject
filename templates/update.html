@@ -22,9 +22,40 @@
             font-family: 'Gowun Dodum', sans-serif;
         }
 
+        a {
+            color: black;
+            text-decoration: none;
+        }
+        
+        .mytitle {
+            width: 100%;
+            height: 250px;
+
+            background-color: rgb(255, 255, 231);
+            color: rgb(60, 72, 48);
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            padding-left: 200px;
+        }
+
+        .myupdate {
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .mybtns {
+            text-align: center;
+            margin-top: 30px;
+        }
+
     </style>
 
     <script>
+        // 레시피 등록
         function update_recipe() {
             let url = $('#url').val()
             let name = $('#name').val()
@@ -37,36 +68,73 @@
 
             fetch('/recipe/update', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
                 alert(data['msg'])
+                window.location.reload()
+                location.href = '/recipe'
             })
-            window.location.reload()
-            location.href='/recipe'
         }
-        
+
+        // 레시피 수정
+        function modify_recipe(under_id) {
+            let modify_url = $('#url').val()
+            let modify_name = $('#name').val()
+            let modify_recipe = $('#recipe').val()
+            console.log(modify_url, modify_name, modify_recipe)
+
+            let formData = new FormData();
+            formData.append("id_give", under_id);
+            formData.append("url_give", modify_url);
+            formData.append("name_give", modify_name);
+            formData.append("recipe_give", modify_recipe);
+
+            fetch('/recipe/put', { method: "PUT", body: formData }).then((res) => res.json()).then((data) => {
+                alert(data['msg'])
+                location.href = "/recipe"
+            })
+        }
 
     </script>
 </head>
 
 <body>
     {% if recipe != undefined %}
+    <div class="mytitle">
+        <a href="/recipe">
+            <h1>우리들의 레시피</h1>
+        </a>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-outline-warning" type="button" onclick="signin()">로그인</button>
+            <button class="btn btn-outline-warning" type="button" onclick="signup()">회원가입</button>
+        </div>
+    </div>
     <div class="myupdate" id="update-box">
         <div class="form-floating mb-3">
-            <input id="url" type="email" class="form-control" placeholder="name@example.com">
-            <label>{{recipe.image}}</label>
+            <input id="url" value="{{recipe.image}}" type="email" class="form-control" placeholder="name@example.com">
+            <label>음식사진URL</label>
         </div>
         <div class="form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here" id="name"></textarea>
-            <label for="name">{{recipe.name}}</label>
-          </div>
+            <textarea class="form-control" placeholder="Leave a comment here" id="name">{{recipe.name}}</textarea>
+            <label for="name">요리명을 입력해주세요</label>
+        </div>
         <div class="form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here" id="recipe" style="height: 100px"></textarea>
-            <label for="recipe">{{recipe.recipe}}</label>
-          </div>
+            <textarea class="form-control" placeholder="Leave a comment here" id="recipe"
+                style="height: 100px">{{recipe.recipe}}</textarea>
+            <label for="recipe">레시피를 입력해주세요</label>
+        </div>
     </div>
     <div class="mybtns">
         <button class="btn btn-warning" onclick="location.href='/recipe'">목록으로</button>
-        <button class="btn btn-warning" onclick="">수정하기</button>
+        <button id="{{recipe._id}}" class="btn btn-warning" onclick="modify_recipe(this.id)">수정하기</button>
     </div>
     {% else %}
+    <div class="mytitle">
+        <a href="/recipe">
+            <h1>우리들의 레시피</h1>
+        </a>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-outline-warning" type="button" onclick="signin()">로그인</button>
+            <button class="btn btn-outline-warning" type="button" onclick="signup()">회원가입</button>
+        </div>
+    </div>
     <div class="myupdate" id="update-box">
         <div class="form-floating mb-3">
             <input id="url" type="email" class="form-control" placeholder="name@example.com">
@@ -75,18 +143,19 @@
         <div class="form-floating">
             <textarea class="form-control" placeholder="Leave a comment here" id="name"></textarea>
             <label for="name">요리명을 입력해주세요</label>
-          </div>
+        </div>
         <div class="form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here" id="recipe" style="height: 100px"></textarea>
+            <textarea class="form-control" placeholder="Leave a comment here" id="recipe"
+                style="height: 100px"></textarea>
             <label for="recipe">레시피를 입력해주세요</label>
-          </div>
+        </div>
     </div>
     <div class="mybtns">
         <button class="btn btn-warning" onclick="location.href='/recipe'">목록으로</button>
         <button class="btn btn-warning" onclick="update_recipe()">등록하기</button>
     </div>
     {% endif %}
-    
+
 </body>
 
 </html>
