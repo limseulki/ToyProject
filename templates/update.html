@@ -72,8 +72,7 @@
 
             fetch('/recipe/update', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
                 alert(data['msg'])
-                window.location.reload()
-                location.href = '/recipe'
+                location.href = '/recipe/'
             })
         }
 
