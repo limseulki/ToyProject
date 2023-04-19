@@ -1,11 +1,17 @@
 # ToyProject
 우리들의 레시피
-> 우리들의 레시피는 본인만의 노하우가 담긴 요리 레시피를 공유하는 게시판 형태의 웹 페이지 입니다.
+> '우리들의 레시피'는 본인만의 노하우가 담긴 요리 레시피를 공유하는 게시판 형태의 웹 페이지 입니다.
 
 # 유튜브 시연 영상
 ![우리들의레시피_썸네일](https://user-images.githubusercontent.com/97998858/232944484-80f0027a-e4d4-464e-a07d-8af8e28d298d.png)
 
 https://youtu.be/Y-vXxqDjDpU
+
+# 기술 스택
+- 프론트앤드 : HTML, CSS, Javascript
+- 백앤드 : Python
+- DB : MongDB
+- 배포 : AWS
 
 # 와이어 프레임
 > 메인페이지
